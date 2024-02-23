@@ -25,6 +25,12 @@ impl Default for GameState {
 fn main() {
     let mut game = Game::new();
 
+    game.window_settings(Window {
+        // resolution: WindowResolution::new(1400.0, 500.0),
+        title: "Catch the cones".to_string(),
+        ..Default::default()
+    });
+
     game.audio_manager
         .play_music(MusicPreset::WhimsicalPopsicle, 0.15);
 
@@ -57,12 +63,14 @@ fn game_logic(engine: &mut Engine, game_state: &mut GameState) {
     }
 
     // keep the text near the edges of the screen
+    let offset = ((engine.time_since_startup_f64 * 3.0).cos() * 5.0) as f32;
+
     let current_score = engine.texts.get_mut("current_score").unwrap();
     current_score.translation.x = engine.window_dimensions.x / 2.0 - 80.0;
-    current_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
+    current_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0 + offset;
 
     let high_score = engine.texts.get_mut("high_score").unwrap();
-    high_score.translation.x = -engine.window_dimensions.x / 2.0 + 80.0;
+    high_score.translation.x = -engine.window_dimensions.x / 2.0 + 110.0;
     high_score.translation.y = engine.window_dimensions.y / 2.0 - 30.0;
 
     // handle collisions
